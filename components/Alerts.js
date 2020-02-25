@@ -33,7 +33,7 @@ export const Issue = ({ precinct, issue, onClick, selected }) => {
             </div>
             <div className="description">{message}</div>
           </div>
-          <NounCard style={{ height: "65px", width: "65px;" }}></NounCard>
+          <NounCard style={{ height: "65px", width: "65px" }}></NounCard>
         </div>
       </div>
     </div>
