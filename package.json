@@ -1,32 +1,52 @@
 {
-  "name": "nevada",
-  "dependencies": {
-    "@emotion/core": "^10.0.27",
-    "@emotion/styled": "^10.0.27",
-    "apollo-boost": "0.4.7",
-    "csv-parse": "^4.8.5",
-    "d3": "^5.15.0",
-    "d3-sankey": "^0.12.3",
-    "graphql": "0.13.2",
-    "lodash": "^4.17.15",
-    "react": "16.12.0",
-    "react-apollo": "2.5.8",
-    "react-dom": "16.12.0",
-    "react-scripts": "2.1.8",
-    "react-transition-group": "^4.3.0",
-    "theme-ui": "^0.3.1"
-  },
+  "name": "uglycauc-us",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "build:static": "next build && next export",
+    "serve:static": "npx serve -s out",
+    "start": "next start",
+    "type-check": "tsc --pretty --noEmit",
+    "test": "jest",
+    "ci": "yarn test && yarn type-check && yarn lint",
+    "lint": "eslint . --ext ts --ext tsx --ext js"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
-  "devDependencies": {}
+  "dependencies": {
+    "@types/lodash": "^4.14.149",
+    "csv-parse": "^4.8.6",
+    "d3": "^5.15.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "lodash": "^4.14.2",
+    "next": "^9.2.2",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "theme-ui": "^0.3.1",
+    "typescript": "^3.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.4",
+    "@types/theme-ui": "^0.3.0",
+    "@typescript-eslint/eslint-plugin": "^2.21.0",
+    "@typescript-eslint/parser": "^2.21.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-react": "^7.18.3",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "yarn lint",
+      "yarn prettier-write",
+      "git add"
+    ]
+  }
 }
