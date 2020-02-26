@@ -5,14 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:static": "next build && next export",
-    "serve:static": "npx serve -s out",
+    "serve": "npx serve out",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",
     "ci": "yarn test && yarn type-check && yarn lint",
     "lint": "eslint . --ext ts --ext tsx --ext js",
-    "export": "next export"
+    "export": "next build && next export"
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
@@ -24,6 +23,7 @@
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "theme-ui": "^0.3.1",
+    "ts-node": "^8.6.2",
     "typescript": "^3.8.2"
   },
   "devDependencies": {
@@ -46,8 +46,7 @@
   "lint-staged": {
     "*.@(ts|tsx)": [
       "yarn lint",
-      "yarn prettier-write",
-      "git add"
+      "yarn prettier-write"
     ]
   }
 }
