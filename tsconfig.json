@@ -1,5 +1,5 @@
 {
-  "include": ["pages/**/*", "components/**/*", "util/**/*"],
+  "include": ["pages/**/*", "components/**/*", "util/**/*", "next.config.js"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
