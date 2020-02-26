@@ -41,7 +41,7 @@ const About: NextPage = () => {
           We are not affiliated with any legitimate political, news or policy
           organization.
         </Styled.p>
-        <Styled.h3>Contact Us:</Styled.h3>
+        <Styled.h3>Contact Us: </Styled.h3>
         <Styled.p>
           Email: <Styled.a href={emailLink}>uglycauc.us@gmail.com</Styled.a>
         </Styled.p>
