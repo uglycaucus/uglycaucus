@@ -11,7 +11,8 @@
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",
     "ci": "yarn test && yarn type-check && yarn lint",
-    "lint": "eslint . --ext ts --ext tsx --ext js"
+    "lint": "eslint . --ext ts --ext tsx --ext js",
+    "export": "next export"
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
