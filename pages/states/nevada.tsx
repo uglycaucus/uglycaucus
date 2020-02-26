@@ -14,6 +14,8 @@ interface Props {
   error?: string
 }
 
+import "core-js/fn/array/flat-map";
+
 const Nevada: NextPage<Props> = ({ data, error }) => {
   if (error) return <p>error: {error}</p>
   const [selectedPrecinct, setSelectedPrecinct] = React.useState(null)
