@@ -5,13 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "serve": "npx serve -s out",
+    "serve": "npx serve out",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",
     "ci": "yarn test && yarn type-check && yarn lint",
     "lint": "eslint . --ext ts --ext tsx --ext js",
-    "export": "next export"
+    "export": "next build && next export"
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
@@ -46,8 +46,7 @@
   "lint-staged": {
     "*.@(ts|tsx)": [
       "yarn lint",
-      "yarn prettier-write",
-      "git add"
+      "yarn prettier-write"
     ]
   }
 }
