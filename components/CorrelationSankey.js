@@ -45,15 +45,20 @@ export default function CorellationSankey(_props) {
 
   const links = graph.links
   const nodes = graph.nodes
-  const svgLinks = links.map(link => {
+  const svgLinks = links.map((link, i) => {
     return (
-      <g fill="none" stroke={link.suss ? "#f11" : "#000"} strokeOpacity="0.2">
+      <g
+        key={i}
+        fill="none"
+        stroke={link.suss ? "#f11" : "#000"}
+        strokeOpacity="0.2"
+      >
         <path d={sankeyLinkHorizontal()(link)} strokeWidth={link.width}></path>
       </g>
     )
   })
-  const svgNodes = nodes.map(node => (
-    <g>
+  const svgNodes = nodes.map((node, i) => (
+    <g key={i}>
       <image
         href={candidatees[node.name]}
         x={node.x0}

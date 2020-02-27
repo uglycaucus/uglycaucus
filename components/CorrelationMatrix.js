@@ -24,7 +24,7 @@ const Cell = styled.div`
 const MatrixCell = styled(Cell)`
   border: 1px solid #666;
   box-sizing: border-box;
-  background: ${(props, t, y) => props.bgcolor}};
+  background: ${props => props.bgcolor}};
   opacity: 0.8;
   font-size: 24px;
 `
@@ -71,15 +71,13 @@ export default function CorrelationMatrix(_props) {
             />
           ))}
         </MatrixRow>
-        {matrixData.map(row => {
+        {matrixData.map((row, i) => {
           return (
-            <MatrixRow>
+            <MatrixRow key={i}>
               {row.values.map((cell, i) => {
-                //   console.log({cell,color:d3.interpolateRdBu(cell)})
                 return i === 0 ? (
-                  <Cell>
+                  <Cell key={i}>
                     <img
-                      key={i}
                       alt={cell}
                       src={candidates[row.name]}
                       width="60px"
@@ -88,7 +86,7 @@ export default function CorrelationMatrix(_props) {
                     />
                   </Cell>
                 ) : (
-                  <MatrixCell bgcolor={d3.interpolateRdBu(cell)}>
+                  <MatrixCell key={i} bgcolor={d3.interpolateRdBu(cell)}>
                     {cell}
                   </MatrixCell>
                 )

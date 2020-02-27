@@ -20,10 +20,6 @@ interface Props {
 }
 
 const Nevada: NextPage<Props> = props => {
-  console.log(
-    "ND: ",
-    typeof window !== "undefined" && (window as any).__NEXT_DATA__.page
-  )
   const { data, error } = props
   if (error) return <p>error: {error}</p>
   const [selectedPrecinct, setSelectedPrecinct] = React.useState(null)
@@ -40,14 +36,10 @@ const Nevada: NextPage<Props> = props => {
 
 // eslint-disable-next-line @typescript-eslint/camelcase
 export const unstable_getStaticProps = async (...args) => {
-  console.log("unstable_getStaticProps", { args })
+  console.warn("unstable_getStaticProps", { args })
   const csv = await getCsv()
-  // if (query.state !== "nevada")
-  //   return { data: {}, error: "State not available" }
-  // console.warn("Get Initial Props")
   const data = massageResult(csv)
   return { props: { data: data as any } }
-  // return { data: (results as unknown) as any PrecinctData }
 }
 
 export default Nevada

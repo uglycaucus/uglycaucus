@@ -33,7 +33,7 @@ const About: NextPage = () => {
           <Styled.a href={twitterLink} target="_blank">
             @uglycaucus
           </Styled.a>{" "}
-          on twitter so we can post an update. Likewise, we'll post all serious
+          on twitter so we can post an update. Likewise, we’ll post all serious
           updates to our twitter.
           <br />
         </Styled.p>

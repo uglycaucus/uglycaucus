@@ -106,7 +106,7 @@ export const Alerts = () => {
         height: "100vh",
       }}
     >
-      <Styled.h2>Some issues we've noticed</Styled.h2>
+      <Styled.h2>Some issues we’ve noticed</Styled.h2>
       {issueCount === 0 ? (
         <Styled.p>Having a normal one</Styled.p>
       ) : (

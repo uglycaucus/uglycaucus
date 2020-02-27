@@ -1,61 +1,63 @@
-import parseCsv from "csv-parse/lib/sync";
-import _ from "lodash";
+/* eslint-disable @typescript-eslint/camelcase */
+
+import parseCsv from "csv-parse/lib/sync"
+import _ from "lodash"
 
 export const precinctId = candidatePrecinct => {
-  const { county, precinct } = candidatePrecinct;
-  return `${county}-${precinct}`;
+  const { county, precinct } = candidatePrecinct
+  return `${county}-${precinct}`
   // return GEOID10;
-};
+}
 
-export const candidateDisplayName = key => candidateNames[key] || key;
+export const candidateDisplayName = key => candidateNames[key] || key
 
 export const precinctDisplayName = candidatePrecinct => {
-  const { county, precinct } = candidatePrecinct;
-  return `${county} ${precinct}`;
-};
+  const { county, precinct } = candidatePrecinct
+  return `${county} ${precinct}`
+}
 export const massageResult = csv => {
   const jsResults = parseCsv(csv, {
     columns: true,
-    skip_empty_lines: true
-  });
-  let countyLevelGroup = _.groupBy(jsResults, "county");
-  let electionData = _.reduce(
+    skip_empty_lines: true,
+  })
+  const countyLevelGroup = _.groupBy(jsResults, "county")
+  const electionData = _.reduce(
     countyLevelGroup,
     function(result, county, countyKey) {
-      let precinctGroup = _.groupBy(county, "precinct");
+      let precinctGroup = _.groupBy(county, "precinct")
       precinctGroup = _.reduce(
         precinctGroup,
         function(precinctResult, precinct, key) {
-          let candidate = _.groupBy(precinct, "candidate");
+          const candidate = _.groupBy(precinct, "candidate")
           precinctResult[key] = _.reduce(
             candidate,
             function(candidateResult, c, candidateKey) {
-              candidateResult[candidateKey] = c[0]; // In the future we can reduce this to a sparser model here.
-              return candidateResult;
+              candidateResult[candidateKey] = c[0] // In the future we can reduce this to a sparser model here.
+              return candidateResult
             },
             {}
-          );
-          return precinctResult;
+          )
+          return precinctResult
         },
         {}
-      );
-      result[countyKey] = precinctGroup;
-      return result;
+      )
+      result[countyKey] = precinctGroup
+      return result
     },
     {}
-  );
+  )
 
-  const flattened = flattenPrecincts({ electionData });
+  const flattened = flattenPrecincts({ electionData })
 
   const refined = Object.keys(flattened).reduce((acc, pkey) => {
-    const candidatesByPrecinct = flattened[pkey];
-    const refined = refinePrecinct(candidatesByPrecinct);
-    acc[pkey] = refined;
-    return acc;
-  }, {});
+    const candidatesByPrecinct = flattened[pkey]
+    const refined = refinePrecinct(candidatesByPrecinct)
+    acc[pkey] = refined
+    return acc
+  }, {})
 
-  return { electionData, refined, rows: jsResults };
-};
+  return { electionData, refined, rows: jsResults }
+}
 
 const candidateNames = {
   delaneyj: "John Delaney",
@@ -71,8 +73,8 @@ const candidateNames = {
   steyert: "Tom Steyer",
   uncommitted: "Uncommitted",
   warrene: "Elizabeth Warren",
-  yanga: "Andrew Yang"
-};
+  yanga: "Andrew Yang",
+}
 
 const precinctKeys = [
   "viability_threshold",
@@ -80,8 +82,8 @@ const precinctKeys = [
   "more_final_votes",
   "fewer_final_votes",
   "game_of_chance",
-  "extra_del_given"
-];
+  "extra_del_given",
+]
 const metaKeys = [
   "row_id",
   "county",
@@ -90,8 +92,8 @@ const metaKeys = [
   "precinct_delegates",
   "county_fips",
   "state_fips",
-  "GEOID10"
-];
+  "GEOID10",
+]
 const candidateKeys = [
   "candidate",
   "align1",
@@ -120,82 +122,82 @@ const candidateKeys = [
   "comments",
   "tie_winner",
   "tie_loser",
-  "reported_del_given"
-];
+  "reported_del_given",
+]
 
 const flattenPrecincts = data => {
-  const { electionData } = data;
-  const countyKeys = Object.keys(electionData);
+  const { electionData } = data
+  const countyKeys = Object.keys(electionData)
   const precincts = countyKeys.flatMap(c =>
     Object.keys(electionData[c]).map(p => electionData[c][p])
-  );
+  )
   return precincts.reduce((acc, p) => {
-    const firstResult = p[Object.keys(p)[0]];
-    const id = precinctId(firstResult);
+    const firstResult = p[Object.keys(p)[0]]
+    const id = precinctId(firstResult)
     if (acc[id]) {
-      console.error(id + " already exists");
+      console.error(id + " already exists")
     }
-    acc[id] = p;
-    return acc;
-  }, {});
-};
+    acc[id] = p
+    return acc
+  }, {})
+}
 
-const falsey = str => !str || str === "FALSE" || str === "NA";
+const falsey = str => !str || str === "FALSE" || str === "NA"
 
 const refinePrecinct = candidatesByPrecinct => {
   const candidateLevel = Object.keys(candidatesByPrecinct).reduce(
     (acc, key) => {
-      const thisResult = candidatesByPrecinct[key];
+      const thisResult = candidatesByPrecinct[key]
 
       const candidateData = candidateKeys.reduce((acc, k) => {
-        const value = thisResult[k];
-        acc[k] = value;
-        return acc;
-      }, {});
+        const value = thisResult[k]
+        acc[k] = value
+        return acc
+      }, {})
       // return {...acc, [key]: candidateData}
-      acc[key] = candidateData;
-      return acc;
+      acc[key] = candidateData
+      return acc
     },
     {}
-  );
+  )
 
   const precinctLevel = Object.keys(candidatesByPrecinct).reduce((acc, key) => {
-    const thisResult = candidatesByPrecinct[key];
+    const thisResult = candidatesByPrecinct[key]
     const precinctData = precinctKeys.reduce((acc, k) => {
-      const value = thisResult[k];
-      acc[k] = value;
-      return acc;
-    }, {});
+      const value = thisResult[k]
+      acc[k] = value
+      return acc
+    }, {})
     if (acc && JSON.stringify(acc) !== JSON.stringify(precinctData)) {
       console.error("precinct data does not match across candidates", {
         acc,
-        precinctData
-      });
+        precinctData,
+      })
     }
-    return precinctData;
-  }, null);
+    return precinctData
+  }, null)
 
   const meta = _.pick(
     candidatesByPrecinct[Object.keys(candidatesByPrecinct)[0]],
     metaKeys
-  );
+  )
 
-  const precinctIssues = issuesForObject(precinctLevel);
+  const precinctIssues = issuesForObject(precinctLevel)
 
   const candidateIssues = Object.keys(candidateLevel).flatMap(candidateKey => {
-    const candidatePrecinct = candidateLevel[candidateKey];
-    return issuesForObject(candidatePrecinct);
-  });
+    const candidatePrecinct = candidateLevel[candidateKey]
+    return issuesForObject(candidatePrecinct)
+  })
 
-  const issues = _.compact([...precinctIssues, ...candidateIssues]);
+  const issues = _.compact([...precinctIssues, ...candidateIssues])
 
   return {
     meta,
     candidates: candidateLevel,
     precinct: precinctLevel,
-    issues
-  };
-};
+    issues,
+  }
+}
 
 const issueMap = {
   // 12 viable_loss          logical: if a candidate was viable in 1st round and lost votes going to final round
@@ -205,7 +207,7 @@ const issueMap = {
     message: ({ candidate }) =>
       `${candidateDisplayName(
         candidate
-      )} was viable in round 1, lost votes in round 2`
+      )} was viable in round 1, lost votes in round 2`,
   },
   // 13 nonviable_no_realign logical: if a nonviable candidate from 1st round did not realign in final round
   nonviable_no_realign: {
@@ -214,7 +216,7 @@ const issueMap = {
       `${candidateDisplayName(
         candidate
       )} was nonviable in 1st-round but did not realign`,
-    summary: "Nonviable no realign"
+    summary: "Nonviable no realign",
   },
   // 14 alpha_shift          string: name of candidate that had alphabetical shift
   alpha_shift: {
@@ -223,34 +225,34 @@ const issueMap = {
       `Alphabetical shift in voting detected from ${candidateDisplayName(
         candidate
       )} to ${candidateDisplayName(alpha_shift)}`,
-    summary: "Alphabetic shift"
+    summary: "Alphabetic shift",
   },
   // 16 more_final_votes     logical: more votes in final alignment than 1st alignment
   more_final_votes: {
     type: "error",
     message: `Precinct has more votes in final alignment than 1st alignment`,
-    summary: "Vote total increased"
+    summary: "Vote total increased",
   },
   // 17 fewer_final_votes    logical: fewer votes in final alignment than 1st. warning, not error
   fewer_final_votes: {
     type: "warning",
     summary: "Vote total decreased",
-    message: `Precinct has fewer votes in final alignment than 1st alignment`
+    message: `Precinct has fewer votes in final alignment than 1st alignment`,
   },
   // 18 del_counts_diff      logical: our delegate counts differ from those reported
   del_counts_diff: {
     type: "error",
     summary: "Our delegate count differs",
-    message: "Our delegate counts differ from those reported"
+    message: "Our delegate counts differ from those reported",
   },
   // 19 extra_del_given      logical: too many delegates given out but all candidates had 1 delegate, so an extra delegate was given. warning, not error
   extra_del_given: {
     type: "error",
     summary: "Total delegates too high",
     message:
-      "All viable candidates had 1 delegate and could not have it taken away, so more delegates than originally intended were given for this precinct"
-  }
-};
+      "All viable candidates had 1 delegate and could not have it taken away, so more delegates than originally intended were given for this precinct",
+  },
+}
 
 const issuesForObject = objectWithIssueKeys => {
   return Object.keys(objectWithIssueKeys)
@@ -260,11 +262,11 @@ const issuesForObject = objectWithIssueKeys => {
         objectWithIssueKeys.candidate !== "uncommitted"
     )
     .reduce((acc, k) => {
-      const issue = issueMap[k];
+      const issue = issueMap[k]
       if (!issue || objectWithIssueKeys.candidate === "Uncommitted") {
-        return acc;
+        return acc
       } else {
-        const { message, type, summary } = issue;
+        const { message, type, summary } = issue
         return [
           ...acc,
           {
@@ -274,12 +276,12 @@ const issuesForObject = objectWithIssueKeys => {
                 ? message(objectWithIssueKeys)
                 : message,
             type,
-            summary
-          }
-        ];
+            summary,
+          },
+        ]
       }
-    }, []);
-};
+    }, [])
+}
 
 /*
 # A tibble: 19 x 2
