@@ -56,7 +56,57 @@ export const massageResult = csv => {
     return acc
   }, {})
 
-  return { electionData, refined, rows: jsResults }
+  function toAlerts(row) {
+    return row //adapt model however we like.
+  }
+
+  function toWarnings(row) {
+    return row //adapt model however we like.
+  }
+
+  function isFalse(row, prop) {
+    return falsey(row[prop])
+  }
+
+  const viable_loss = _.filter(
+    jsResults,
+    row => !isFalse(row, "viable_loss")
+  ).map(toAlerts)
+  const more_final_votes = _.filter(
+    jsResults,
+    row => !isFalse(row, "more_final_votes")
+  ).map(toAlerts)
+  const nonviable_no_realign = _.filter(
+    jsResults,
+    row => !isFalse(row, "nonviable_no_realign")
+  ).map(toAlerts)
+
+  const del_counts_diff = _.filter(
+    jsResults,
+    row => !isFalse(row, "del_counts_diff")
+  ).map(toWarnings)
+  const has_alpha_shift = _.filter(
+    jsResults,
+    row => !isFalse(row, "has_alpha_shift")
+  ).map(toWarnings)
+  const fewer_final_votes = _.filter(
+    jsResults,
+    row => !isFalse(row, "fewer_final_votes")
+  ).map(toWarnings)
+  const extra_del_given = _.filter(
+    jsResults,
+    row => !isFalse(row, "extra_del_given")
+  ).map(toWarnings)
+
+  const alerts = { viable_loss, more_final_votes, nonviable_no_realign }
+  const warnings = {
+    del_counts_diff,
+    has_alpha_shift,
+    fewer_final_votes,
+    extra_del_given,
+  }
+
+  return { electionData, refined, rows: jsResults, alerts, warnings }
 }
 
 const candidateNames = {
