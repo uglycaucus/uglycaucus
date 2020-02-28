@@ -6,7 +6,6 @@
     "next.config.js",
     "next-env.d.ts"
   ],
-  "exclude": ["src/**/*"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
