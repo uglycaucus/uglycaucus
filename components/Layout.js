@@ -30,7 +30,7 @@ export const Layout = ({ children }) => {
               color: "gray.1",
               px: [2, 5],
               fontWeight: "bold",
-              fontFamily: "work",
+              fontFamily: "'Work Sans'",
             }}
           >
             UglyCauc.us

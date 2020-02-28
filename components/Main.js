@@ -3,13 +3,11 @@ import React from "react"
 import { jsx, Flex, Box, Styled } from "theme-ui"
 import Nevada from "./Nevada"
 import { Alerts } from "./Alerts"
-// import Sankey from "./CorrelationSankey";
-// import CorrelationMatrix from "./CorrelationMatrix";
 import { PrecinctTable } from "./PrecinctTable"
 import { UserContext } from "./Context"
 
 const showMap =
-  process.env.REACT_APP_SHOW_MAP === "true" ||
+  process.env.ENABLE_MAP === "true" ||
   (typeof window !== "undefined" && window.location.search.match("showmap"))
 
 const Loading = () => {
