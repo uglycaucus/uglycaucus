@@ -1,0 +1,22 @@
+{
+  "name": "uglycauc-us",
+  "version": "1.0.0",
+  "description": "Uglycauc.us",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd web && yarn next build && yarn next export ../public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uglycaucus/uglycauc-us.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uglycaucus/uglycauc-us/issues"
+  },
+  "homepage": "https://github.com/uglycaucus/uglycauc-us#readme"
+}
