@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <h1 align="center"><strong>Uglycauc.us</strong></h1>
 
 2020 Caucus results inspected by the Uglycaucus Senior Political Research Unit.
@@ -10,6 +10,7 @@ _We are still in the process of migrating all of these pieces from separate repo
 - `/analysis`: The code that generates our results
 - `/data`: Our results
 - `/web`: The web app built from our results at https://uglygcauc.us
+- `/caucus_docs/`: Assorted documentation from state Democratic parties to guide caucus math script construction
 
 ## Contributors
 
