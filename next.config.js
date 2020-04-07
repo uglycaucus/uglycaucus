@@ -4,7 +4,7 @@ const fs = require("fs")
 const path = require("path")
 const { transformCSVs } = require("./util/buildTime/localData")
 
-const enabledStates = fs.readdirSync(path.resolve("data"))
+const enabledStates = fs.readdirSync(path.resolve("data", "build"))
 console.warn("Enabled States: ", enabledStates.join(", "))
 
 transformCSVs(enabledStates)
