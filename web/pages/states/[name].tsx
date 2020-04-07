@@ -38,7 +38,7 @@ export const getStaticPaths = () => {
 
 export const getStaticProps = async (...args) => {
   const state = args[0].params.name
-  const data = require(`../../public/data/${state}.json`)
+  const data = require(`../../data/${state}/results.json`)
 
   return { props: { data } }
 }

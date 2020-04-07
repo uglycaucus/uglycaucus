@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.149",
-    "csv-loader": "^3.0.2",
     "csv-parse": "^4.8.6",
     "d3": "^5.15.0",
     "dotenv": "^8.2.0",

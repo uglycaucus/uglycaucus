@@ -6,8 +6,8 @@ const { massageResult } = require("./massageData")
 const projectRoot = path.resolve()
 
 const getPaths = state => ({
-  csvPath: path.resolve(projectRoot, "..", "data", state, "results.csv"),
-  jsonPath: path.resolve(projectRoot, "public", "data", state + ".json"),
+  csvPath: path.resolve(projectRoot, "data", state, "results.csv"),
+  jsonPath: path.resolve(projectRoot, "data", state, "results.json"),
 })
 
 exports.transformCSVs = function transformCSVs(states) {
