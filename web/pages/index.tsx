@@ -1,14 +1,24 @@
-import React from "react"
+/** @jsx jsx */
 import { NextPage } from "next"
-import { useRouter } from "next/router"
-import { Styled } from "theme-ui"
+
+import Link from "next/link"
+import { Styled, Box, jsx } from "theme-ui"
+import { Layout } from "../components/Layout"
 
 const Home: NextPage = () => {
-  const router = useRouter()
-  React.useEffect(() => {
-    router.push("/states/nevada")
-  })
-  return <Styled.code>redirecting to nevada... </Styled.code>
+  return (
+    <Layout>
+      <Box sx={{ textAlign: "center", py: 4 }}>
+        <Link href="/states/[name]" as="/states/nevada">
+          <Styled.a
+            sx={{ fontFamily: "sans", cursor: "grabbing", fontSize: 3 }}
+          >
+            Try Nevada
+          </Styled.a>
+        </Link>
+      </Box>
+    </Layout>
+  )
 }
 
 export default Home

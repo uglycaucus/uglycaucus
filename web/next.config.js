@@ -1,16 +1,16 @@
+// @ts-check
 require("dotenv").config()
+const { transformCSVs } = require("./util/buildTime/localData")
+const { STATES } = process.env
+
+const enabledStates = (STATES && STATES.split(",")) || ["missing states"]
+
+transformCSVs(enabledStates)
 
 module.exports = {
   exportTrailingSlash: true,
   env: {
     ENABLE_MAP: process.env.ENABLE_MAP,
+    enabledStates,
   },
-  // exportPathMap: function() {
-  //   return {
-  //     '/': { page: '/' },
-  //     '/about': { page: '/about' },
-  // may be worth returning to this method of rendering if we are querying a whole directory of data and dynamically generating pages from it
-  //     '/states/nevada' : { page: '/states/nevada'},
-  //     };
-  // }
 }

@@ -140,6 +140,7 @@ export const theme = {
     },
     a: {
       color: "primary",
+      cursor: "pointer",
     },
     pre: {
       fontFamily: "monospace",
