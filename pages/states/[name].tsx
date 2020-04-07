@@ -3,6 +3,7 @@ import { NextPage } from "next"
 import { Layout } from "../../components/Layout"
 import { UserContext } from "../../components/Context"
 import { Main } from "../../components/Main"
+import { enabledStates } from "../../util/buildTime/localData"
 
 interface Props {
   // data: PrecinctData
@@ -28,9 +29,7 @@ const Nevada: NextPage<Props> = props => {
 
 export const getStaticPaths = () => {
   return {
-    paths: (process.env.STATES as string)
-      .split(",")
-      .map(state => `/states/${state}`),
+    paths: enabledStates.map(state => `/states/${state}`),
 
     fallback: false,
   }

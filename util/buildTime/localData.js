@@ -10,8 +10,11 @@ const getPaths = state => ({
   jsonPath: path.resolve(projectRoot, "data", "build", state, "results.json"),
 })
 
-exports.transformCSVs = function transformCSVs(states) {
-  states.forEach(state => {
+const enabledStates = fs.readdirSync(path.resolve("data", "build"))
+exports.enabledStates = enabledStates
+exports.transformCSVs = function transformCSVs() {
+  console.warn("Enabled States: ", enabledStates.join(", "))
+  enabledStates.forEach(state => {
     const { csvPath, jsonPath } = getPaths(state)
     const csv = fs.readFileSync(csvPath, { encoding: "utf-8" })
     const data = massageResult(csv)
