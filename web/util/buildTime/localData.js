@@ -4,7 +4,6 @@ const fs = require("fs")
 const { massageResult } = require("./massageData")
 
 const projectRoot = path.resolve()
-console.warn({ projectRoot })
 
 const getPaths = state => ({
   csvPath: path.resolve(projectRoot, "..", "data", state, "results.csv"),

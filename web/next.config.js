@@ -1,9 +1,11 @@
 // @ts-check
 require("dotenv").config()
+const fs = require("fs")
+const path = require("path")
 const { transformCSVs } = require("./util/buildTime/localData")
-const { STATES } = process.env
 
-const enabledStates = (STATES && STATES.split(",")) || ["missing states"]
+const enabledStates = fs.readdirSync(path.resolve("../data"))
+console.warn("Enabled States: ", enabledStates.join(", "))
 
 transformCSVs(enabledStates)
 
