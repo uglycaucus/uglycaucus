@@ -1,18 +1,27 @@
-
 <h1 align="center"><strong>Uglycauc.us</strong></h1>
 
-2020 Caucus results inspected by the Uglycaucus Senior Political Research Unit.
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/zeit/next.js/tree/canary/packages/create-next-app).
 
-## Repository structure
+## Getting started
 
-_We are still in the process of migrating all of these pieces from separate repositories and hosts_
+We use yarn to manage dependencies and tasks.
 
-- `/analysis`: The code that generates our results
-- `/data`: Our results
-- `/web`: The web app built from our results at https://uglygcauc.us
-- `/caucus_docs/`: Assorted documentation from state Democratic parties to guide caucus math script construction
+```sh
+# Install dependencies
+yarn install
+# Start the development server
+yarn dev
 
-## Contributors
+# Build and test a static production deployment;
+yarn export && yarn serve
+```
 
-Issues and pull requests are open. License forthcoming. MIT for now.
+## Contributing
 
+We accept issues and pull requests. Make sure your PRs pass linting and type-checking (executed automatically on commit/push). Pull requests are automatically built into deploy PRs.
+
+## Deploy on ZEIT Now
+
+The easiest way to deploy your Next.js app is to use the [ZEIT Now Platform](https://zeit.co/) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

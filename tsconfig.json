@@ -23,5 +23,5 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "exclude": ["node_modules"]
+  "exclude": ["caucus_docs/"]
 }

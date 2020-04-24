@@ -1,70 +1,29 @@
-// TODO: FILL IN ENOUGH TYPES HERE TO MAKE THIS COMPILE (OR RELAX TS CONFIG STRICTNESS)
-import parseCsv from "csv-parse/lib/sync"
-import _ from "lodash"
+/* eslint-disable @typescript-eslint/camelcase */
 
-export interface PrecinctData {
-  /* The raw (processed) csv rows */
-  rows: CandidatePrecinct[]
-  /* Rows grouped by county and precinct */
-  electionData: {
-    [county: string]: {
-      [precinct: string]: CandidatePrecinct[]
-    }
-  }
-  /* The raw (processed) csv rows */
-  refined: any
-}
+const parseCsv = require("csv-parse/lib/sync")
+const _ = require("lodash")
+const { candidateDisplayName } = require("../precinctData")
 
-type CSVBool = "NA" | "TRUE" | "FALSE"
-/**
- * A CSV row representing a candidate's results joined with a precinct
- */
-interface CandidatePrecinct {
-  viability_threshold: number
-  has_alpha_shift: CSVBool
-  more_final_votes: CSVBool
-  fewer_final_votes: CSVBool
-  game_of_chance: CSVBool
-  extra_del_given: CSVBool
-  row_id: string
-  county: string
-  precinct: string
-  precinct_full: string
-  precinct_delegates: number
-  county_fips: string
-  state_fips: string
-  GEOID10: string
-}
-
-export const precinctId = candidatePrecinct => {
+const precinctId = candidatePrecinct => {
   const { county, precinct } = candidatePrecinct
   return `${county}-${precinct}`
   // return GEOID10;
 }
 
-export const candidateDisplayName = (key: string): string =>
-  candidateNames[key] || key
-
-export const precinctDisplayName = (
-  candidatePrecinct: CandidatePrecinct
-): string => {
-  const { county, precinct } = candidatePrecinct
-  return `${county} ${precinct}`
-}
-export const massageResult = csv => {
+exports.massageResult = function massageResult(csv) {
   const jsResults = parseCsv(csv, {
     columns: true,
     skip_empty_lines: true,
   })
-  let countyLevelGroup = _.groupBy(jsResults, "county")
-  let electionData = _.reduce(
+  const countyLevelGroup = _.groupBy(jsResults, "county")
+  const electionData = _.reduce(
     countyLevelGroup,
     function(result, county, countyKey) {
       let precinctGroup = _.groupBy(county, "precinct")
       precinctGroup = _.reduce(
         precinctGroup,
         function(precinctResult, precinct, key) {
-          let candidate = _.groupBy(precinct, "candidate")
+          const candidate = _.groupBy(precinct, "candidate")
           precinctResult[key] = _.reduce(
             candidate,
             function(candidateResult, c, candidateKey) {
@@ -92,24 +51,57 @@ export const massageResult = csv => {
     return acc
   }, {})
 
-  return { electionData, refined, rows: jsResults }
-}
+  function toAlerts(row) {
+    return row //adapt model however we like.
+  }
 
-const candidateNames = {
-  delaneyj: "John Delaney",
-  bennetm: "Michael Bennet",
-  bidenj: "Joe Biden",
-  bloombergm: "Mike Bloombefg",
-  buttigiegp: "Pete Buttigieg",
-  gabbardt: "Tulsi Gabbard",
-  klobuchara: "Amy Klobuchar",
-  other: "Other",
-  patrickd: "Deval Patrick",
-  sandersb: "Bernie Sanders",
-  steyert: "Tom Steyer",
-  uncommitted: "Uncommitted",
-  warrene: "Elizabeth Warren",
-  yanga: "Andrew Yang",
+  function toWarnings(row) {
+    return row //adapt model however we like.
+  }
+
+  function isFalse(row, prop) {
+    return falsey(row[prop])
+  }
+
+  const viable_loss = _.filter(
+    jsResults,
+    row => !isFalse(row, "viable_loss")
+  ).map(toAlerts)
+  const more_final_votes = _.filter(
+    jsResults,
+    row => !isFalse(row, "more_final_votes")
+  ).map(toAlerts)
+  const nonviable_no_realign = _.filter(
+    jsResults,
+    row => !isFalse(row, "nonviable_no_realign")
+  ).map(toAlerts)
+
+  const del_counts_diff = _.filter(
+    jsResults,
+    row => !isFalse(row, "del_counts_diff")
+  ).map(toWarnings)
+  const has_alpha_shift = _.filter(
+    jsResults,
+    row => !isFalse(row, "has_alpha_shift")
+  ).map(toWarnings)
+  const fewer_final_votes = _.filter(
+    jsResults,
+    row => !isFalse(row, "fewer_final_votes")
+  ).map(toWarnings)
+  const extra_del_given = _.filter(
+    jsResults,
+    row => !isFalse(row, "extra_del_given")
+  ).map(toWarnings)
+
+  const alerts = { viable_loss, more_final_votes, nonviable_no_realign }
+  const warnings = {
+    del_counts_diff,
+    has_alpha_shift,
+    fewer_final_votes,
+    extra_del_given,
+  }
+
+  return { electionData, refined, rows: jsResults, alerts, warnings }
 }
 
 const precinctKeys = [
@@ -120,17 +112,6 @@ const precinctKeys = [
   "game_of_chance",
   "extra_del_given",
 ]
-
-type PrecinctLevelData = Pick<
-  CandidatePrecinct,
-  | "viability_threshold"
-  | "has_alpha_shift"
-  | "more_final_votes"
-  | "fewer_final_votes"
-  | "game_of_chance"
-  | "extra_del_given"
->
-
 const metaKeys = [
   "row_id",
   "county",
@@ -141,19 +122,6 @@ const metaKeys = [
   "state_fips",
   "GEOID10",
 ]
-
-type MetaLevelData = Pick<
-  CandidatePrecinct,
-  | "row_id"
-  | "county"
-  | "precinct"
-  | "precinct_full"
-  | "precinct_delegates"
-  | "county_fips"
-  | "state_fips"
-  | "GEOID10"
->
-
 const candidateKeys = [
   "candidate",
   "align1",
@@ -185,10 +153,6 @@ const candidateKeys = [
   "reported_del_given",
 ]
 
-interface PrecinctLevel {
-  [k: string]: PrecinctLevelData
-}
-
 const flattenPrecincts = data => {
   const { electionData } = data
   const countyKeys = Object.keys(electionData)
@@ -211,7 +175,7 @@ const falsey = str => !str || str === "FALSE" || str === "NA"
 const refinePrecinct = candidatesByPrecinct => {
   const candidateLevel = Object.keys(candidatesByPrecinct).reduce(
     (acc, key) => {
-      const thisResult: CandidatePrecinct = candidatesByPrecinct[key]
+      const thisResult = candidatesByPrecinct[key]
 
       const candidateData = candidateKeys.reduce((acc, k) => {
         const value = thisResult[k]
@@ -225,26 +189,21 @@ const refinePrecinct = candidatesByPrecinct => {
     {}
   )
 
-  const precinctLevel: PrecinctLevel = Object.keys(candidatesByPrecinct).reduce(
-    (acc: any, key: string) => {
-      const thisResult: CandidatePrecinct = candidatesByPrecinct[key]
-      const precinctData = precinctKeys.reduce((acc, k) => {
-        const value = thisResult[k]
-        acc[k] = value
-        return acc
-      }, {} as Partial<PrecinctLevelData>)
-      if (acc && JSON.stringify(acc) !== JSON.stringify(precinctData)) {
-        console.error("precinct data does not match across candidates", {
-          acc,
-          precinctData,
-        })
-      }
-      // needs this assertion or it will be seen as a partial due to the reduce.
-      // As long as precinctKeys array match our Pick<> string union above we are good
-      return precinctData as PrecinctLevel
-    },
-    {} as PrecinctLevel
-  )
+  const precinctLevel = Object.keys(candidatesByPrecinct).reduce((acc, key) => {
+    const thisResult = candidatesByPrecinct[key]
+    const precinctData = precinctKeys.reduce((acc, k) => {
+      const value = thisResult[k]
+      acc[k] = value
+      return acc
+    }, {})
+    if (acc && JSON.stringify(acc) !== JSON.stringify(precinctData)) {
+      console.error("precinct data does not match across candidates", {
+        acc,
+        precinctData,
+      })
+    }
+    return precinctData
+  }, null)
 
   const meta = _.pick(
     candidatesByPrecinct[Object.keys(candidatesByPrecinct)[0]],
