@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build:static": "next build && next export",
     "serve": "serve out",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "isomorphic-unfetch": "^3.0.0",
     "lodash": "^4.14.2",
-    "next": "^9.2.2",
+    "next": "9.3.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "serve": "^11.3.0",
